@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>KING OF POWER Auth</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -16,16 +16,16 @@
             --glass-bg: rgba(11, 17, 32, 0.65);
         }
 
-        /* STRICT ANDROID FIXES */
+        /* STRICT ANDROID FIXES: Locks viewport, removes overscroll */
         body, html {
             width: 100vw; 
-            height: 100dvh; /* Uses dynamic viewport height for mobile */
+            height: 100dvh; 
             overflow: hidden; 
             margin: 0; padding: 0;
             background-color: var(--navy);
             font-family: 'Inter', sans-serif;
             color: #fff;
-            overscroll-behavior-y: none; /* Stops pull-to-refresh */
+            overscroll-behavior-y: none; 
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -48,7 +48,6 @@
             border: 1px solid rgba(0, 229, 255, 0.2);
             border-radius: 16px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            /* Transform optimizations for 3D tilt and lag reduction */
             will-change: transform;
             transition: transform 0.1s ease-out;
             transform-style: preserve-3d;
@@ -66,7 +65,7 @@
             padding: 14px 14px 14px 44px; font-size: 14px;
             font-family: 'JetBrains Mono', monospace;
             transition: all 0.3s ease; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-            -webkit-appearance: none; /* Removes native mobile styling */
+            -webkit-appearance: none; 
         }
         .tech-input:focus {
             outline: none; border-color: var(--cyan);
@@ -87,7 +86,6 @@
         .btn-primary:active { transform: scale(0.96); filter: brightness(1.2); }
         .btn-primary:disabled { opacity: 0.6; pointer-events: none; }
 
-        /* Screens & Navigation */
         .screen { position: absolute; inset: 0; display: flex; flex-direction: column; transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 10; }
         .hidden-screen { opacity: 0; pointer-events: none; transform: scale(0.95); }
         .active-screen { opacity: 1; pointer-events: auto; transform: scale(1); }
@@ -112,13 +110,69 @@
         .cyber-loader { border: 3px solid rgba(0,229,255,0.2); border-top-color: var(--cyan); border-radius: 50%; width: 20px; height: 20px; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Custom Scroll for main view */
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-thumb { background: rgba(0,229,255,0.5); border-radius: 4px; }
         
         /* Toggle Switch */
         .toggle-checkbox:checked { right: 0; border-color: var(--cyan); }
         .toggle-checkbox:checked + .toggle-label { background-color: var(--cyan); box-shadow: 0 0 10px var(--cyan); }
+
+        .telegram-wrapper {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            animation: floatContainer 4s ease-in-out infinite;
+            white-space: nowrap;
+        }
+        .telegram-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.15), rgba(11, 17, 32, 0.95), rgba(0, 136, 255, 0.2));
+            background-size: 200% 200%;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 229, 255, 0.4);
+            border-radius: 50px;
+            padding: 12px 28px;
+            color: #fff;
+            text-decoration: none;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.2), inset 0 0 10px rgba(0, 229, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: bgShift 4s ease infinite, cyanPulse 3s infinite;
+        }
+        .telegram-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.6);
+            border-color: var(--cyan);
+        }
+        .telegram-icon {
+            animation: iconBob 2s infinite;
+            filter: drop-shadow(0 0 5px var(--cyan));
+        }
+        
+        @keyframes floatContainer {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-8px); }
+        }
+        @keyframes bgShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes cyanPulse {
+            0% { box-shadow: 0 0 15px rgba(0, 229, 255, 0.2), inset 0 0 10px rgba(0, 229, 255, 0.1); }
+            50% { box-shadow: 0 0 25px rgba(0, 229, 255, 0.5), inset 0 0 15px rgba(0, 229, 255, 0.2); }
+            100% { box-shadow: 0 0 15px rgba(0, 229, 255, 0.2), inset 0 0 10px rgba(0, 229, 255, 0.1); }
+        }
+        @keyframes iconBob {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-2px) rotate(-5deg); }
+            75% { transform: translateY(1px) rotate(5deg); }
+        }
     </style>
 </head>
 <body>
@@ -128,14 +182,14 @@
 
         <div id="toast-wrapper" class="absolute top-8 left-0 w-full px-4 z-[100] flex flex-col gap-2 pointer-events-none"></div>
 
-        <div id="screen-login" class="screen active-screen justify-center p-6 z-50 bg-[#0b1120]/70 backdrop-blur-md">
+        <div id="screen-login" class="screen active-screen justify-center items-center p-6 z-50 bg-[#0b1120]/70 backdrop-blur-md pb-24">
             <div class="glass-panel tilt-card p-6 w-full max-w-sm mx-auto flex flex-col items-center">
                 
                 <!-- EXACT REQUESTED LOGO TAG -->
-                <img src="logo.png" alt="Logo" style="width: 100px; height: 100px; border-radius: 50%; box-shadow: 0 0 20px #00e5ff; display: block; margin: 0 auto 20px auto; background: rgba(0, 229, 255, 0.1); border: 2px solid #00e5ff; object-fit: cover;" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIgZmlsbD0iIzAwRTVGRiIgZmlsbC1vcGFjaXR5PSIwLjIiLz48dGV4dCB4PSI1MCIgY3k9IjU1IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiMwMEU1RkYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkxPR088L3RleHQ+PC9zdmc+'">
+                <img src="logo.jpg" style="width:120px; height:120px; object-fit:contain; border-radius:15px; border:2px solid #00E5FF; box-shadow:0 0 20px rgba(0,229,255,0.4); margin:0 auto 20px auto; display:block; background:rgba(0,0,0,0.5);">
                 
-                <h1 class="text-2xl font-black text-white tracking-widest uppercase mb-1 drop-shadow-[0_0_10px_rgba(0,229,255,0.5)]">KING OF POWER</h1>
-                <p class="text-[10px] text-cyan-400 font-mono tracking-[0.3em] mb-8">SECURE_AUTH_NODE</p>
+                <h1 class="text-2xl font-black text-white tracking-widest uppercase mb-1 drop-shadow-[0_0_10px_rgba(0,229,255,0.5)] text-center">KING OF POWER</h1>
+                <p class="text-[10px] text-cyan-400 font-mono tracking-[0.3em] mb-8 text-center">SECURE_AUTH_NODE</p>
 
                 <div class="w-full space-y-4">
                     <div class="relative">
@@ -151,6 +205,17 @@
                         <i class="fas fa-power-off"></i> <span>Initialize</span>
                     </button>
                 </div>
+            </div>
+
+            <div class="telegram-wrapper">
+                <a href="https://t.me/KING_OF_POWER_OWNER" target="_blank" rel="noopener noreferrer" class="telegram-btn">
+                    <div class="telegram-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20.665 3.31799C20.665 3.31799 22.84 2.45799 22.684 4.18199C22.607 5.04199 21.905 9.11799 21.282 13.576L19.57 20.219C19.57 20.219 19.337 21.391 18.248 21.547C17.159 21.703 15.37 20.531 14.981 20.219L9.61399 15.766L7.43599 17.798C7.43599 17.798 6.96899 18.267 6.50199 18.267C6.11299 18.267 6.26899 17.798 6.26899 17.798L7.66899 13.029L16.302 5.19299C16.302 5.19299 17.391 4.17699 16.924 3.70799C16.457 3.23899 15.291 4.09899 15.291 4.09899L4.63699 11.232C4.63699 11.232 3.78199 11.778 2.30399 11.309L-0.341003 10.528C-0.341003 10.528 -1.275 9.98199 0.435997 9.35699C4.167 7.71699 14.825 3.47399 20.665 3.31799Z" fill="#00E5FF"/>
+                        </svg>
+                    </div>
+                    <span class="font-black text-[11px] tracking-widest mt-[2px]">TELEGRAM CONTACT</span>
+                </a>
             </div>
         </div>
 
@@ -347,7 +412,7 @@
             maxRing: 50
         };
 
-        // Web Audio API
+        // Web Audio API Engine
         let audioCtx = null;
         function initAudio() {
             if (!audioCtx) {
@@ -402,6 +467,7 @@
             }
         }
 
+        // STRICT Android 60FPS Optimization: Max 25 Particles
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d', { alpha: false }); 
         const particles = [];
@@ -415,7 +481,6 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        // Optimized for mobile: Max 25 particles
         for (let i = 0; i < 25; i++) {
             particles.push({
                 x: Math.random() * canvas.width,
@@ -446,7 +511,7 @@
                     let dx = p.x - p2.x;
                     let dy = p.y - p2.y;
                     let distSq = dx*dx + dy*dy;
-                    if(distSq < 15000) { // Math.sqrt(15000) ~= 122
+                    if(distSq < 15000) { 
                         let dist = Math.sqrt(distSq);
                         ctx.beginPath();
                         ctx.strokeStyle = `rgba(0, 229, 255, ${0.2 - dist/600})`;
@@ -461,7 +526,6 @@
         }
         animateCanvas();
 
-        // 3D Tilt Effect
         function applyTilt() {
             const cards = document.querySelectorAll('.tilt-card');
             cards.forEach(el => {
@@ -523,7 +587,7 @@
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fas fa-power-off"></i> <span>Initialize</span>';
                 
-                // EXACT login match required
+                // STRICT LOGIN REQUIREMENTS
                 const valid1 = (user === 'Nivassadadiya@gmail.com' && pass === 'Nivas^100%ex97059705');
                 const valid2 = (user === 'YASH' && pass === 'YASH');
 
@@ -589,7 +653,7 @@
             const keyVal = keyInput.value.trim();
             const btn = document.getElementById('btn-generate');
 
-            // STRICT Check for Admin Gen Key
+            // STRICT KEY REQUIREMENT
             if (keyVal !== 'YASH2007') {
                 playSound('error');
                 showToast('Invalid Admin Generation Key', true);
@@ -600,7 +664,6 @@
             btn.innerHTML = '<div class="cyber-loader"></div> <span class="ml-2 font-mono text-sm">PROCESSING...</span>';
             btn.disabled = true;
 
-            // 1.5s loading animation requirement
             setTimeout(() => {
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fas fa-fingerprint text-lg mr-1"></i> Generate License';
